@@ -31,7 +31,7 @@ def upload_file(user):
     users = [user["username"] for user in load_users()]
     if user in users:
         code = request.form["code"]
-        with open(f"{user}_onshaked_handler.ino", "w") as f:
+        with open(f"{user}_onshake_handler.ino", "w") as f:
             f.write(code)
         return {"text": "OK"}, 200
     else:
@@ -67,8 +67,8 @@ def download_users():
 @app.route("/download/<string:user>", methods=["GET"])
 def download_code(user):
 
-    download_file_name = "onshaked_handler.ino"
-    download_file = f"{user}_onshaked_handler.ino"
+    download_file_name = "onshake_handler.ino"
+    download_file = f"{user}_onshake_handler.ino"
 
     return send_file(
         download_file,

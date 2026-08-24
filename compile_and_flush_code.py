@@ -83,12 +83,12 @@ def compile_and_flush_code():
     button.config(text="ダウンロード中...")
     button.update()
     print("ダウンロード中...")
-    # download_file(users[user], './onshaked_handler.ino')
+    # download_file(users[user], './onshake_handler.ino')
     url = args.file_server if args.file_server[-1] != "/" else args.file_server[:-1]
     url = f"{url}/download/{users[user]}"
     print(url)
     r = requests.get(url, allow_redirects=True, auth=auth)
-    open("./onshaked_handler.ino", "wb").write(r.content)
+    open("./onshake_handler.ino", "wb").write(r.content)
 
     # compile
     command = f"{args.arduino_cli} compile --fqbn ATTinyCore:avr:attinyx5opti --build-path ./build"
