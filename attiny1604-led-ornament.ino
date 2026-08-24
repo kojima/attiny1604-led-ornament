@@ -63,6 +63,7 @@ int wakeupInterval = 10;
 void loop() {
   if (counter == 0 || counter >= wakeupInterval) {
     digitalWrite(WS2812_VCC, HIGH);
+    delay(10);
     handleOnShake();
     counter = 0;  
   }
@@ -78,7 +79,7 @@ void goToSleep() {
 
   // Disable the ADC
   ADC0.CTRLA &= ~ADC_ENABLE_bm;
-   
+    
   set_sleep_mode(SLEEP_MODE_PWR_DOWN);
   sleep_enable();
 
@@ -87,4 +88,3 @@ void goToSleep() {
 
   sleep_disable();
 }
-
