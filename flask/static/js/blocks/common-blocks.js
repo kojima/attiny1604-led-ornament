@@ -518,6 +518,9 @@ const loadBlocklyData = () => {
             blocks[block.id] = block;
 
             if (!lastBlock) {
+                if (blocklyClass !== OnShakedBlocklyElement) {
+                    block.element.classList.add('blockly-disabled');
+                }
                 Editor.canvas.appendChild(block.element);
             } else {
                 lastBlock.nextBlock = block;
