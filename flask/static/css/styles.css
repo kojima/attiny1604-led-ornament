@@ -725,7 +725,7 @@ div.fade-in-in-ms-wrapper:not(.focused)::after {
     /*filter: url(#blocklySelectedGlowFilter);*/
 }
 
-.blockly-element.blockly-disabled {
+#blockly_editor > .blockly-element.blockly-disabled {
     filter: saturate(0) opacity(0.65); 
 }
 
