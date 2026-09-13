@@ -42,6 +42,12 @@ class LoopBlocklyElement extends ContainerBlocklyElement {
     _repeatCount = 4;
     _svgText = null;
 
+    _getBottomPlaceHolderPos() {
+        const totalInnerBlockHeight = this.totalInnerBlockHeight(0);
+        const extraV = totalInnerBlockHeight === 0 ? 24 : 0;
+        return [-16, 48 + 24 + totalInnerBlockHeight + extraV];
+    }
+
     getNumberOfEntry() {
         return 1;
     }

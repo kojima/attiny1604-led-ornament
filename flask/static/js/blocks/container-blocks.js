@@ -42,8 +42,9 @@ class ContainerBlocklyElement extends BlocklyElement {
         // check for insertable
         const numOfEntry = this.getNumberOfEntry();
         let totalHeight = 48;
+        const offset = block.y < this.absY ? block.height * block.height : 0;
         for (let i = 0; i < numOfEntry; i++) {
-            const acceptable = Math.pow(block.x - this.absX, 2) + Math.pow(block.y - (this.absY + totalHeight), 2) < 1600;
+            const acceptable = Math.pow(block.x - this.absX, 2) + Math.pow(block.y - (this.absY + totalHeight), 2) < Editor.acceptableCriteria + offset;
             if (acceptable) {
                 this._element.querySelector(`.placeholder.inner-${i}`).style.display = 'block';
                 return true;
@@ -61,7 +62,7 @@ class ContainerBlocklyElement extends BlocklyElement {
             const numOfEntry = this.getNumberOfEntry();
             let totalHeight = 48;
             for (let i = 0; i < numOfEntry; i++) {
-                const acceptable = Math.pow(block.x - this.absX, 2) + Math.pow(block.y - (this.absY + totalHeight), 2) < 1600;
+                const acceptable = Math.pow(block.x - this.absX, 2) + Math.pow(block.y - (this.absY + totalHeight), 2) < Editor.acceptableCriteria;
                 if (acceptable) {
                     block.prevBlock = this;
                     block.x = 16;

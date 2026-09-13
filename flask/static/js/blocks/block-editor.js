@@ -23,6 +23,7 @@ class Editor {
     static simulatorPausedAt = null;
     static previousTimeStamp = null;
     static currentBlock = null;
+    static acceptableCriteria = 2000;
     static simulatorStep = (timestamp) => {
         const playSimulator = document.getElementById('play_simulator');
         playSimulator.classList.remove('play');

@@ -155,6 +155,10 @@ class BlocklyElement {
         return `translate(${translateX}, ${translateY}) scale(${scale}, ${scale})`;
     }
 
+    _getBottomPlaceHolderPos() {
+        return [-16, 42];
+    }
+
     generateTopPlaceholder() {
         const g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
         g.classList.add('placeholder');
@@ -173,7 +177,8 @@ class BlocklyElement {
         g.classList.add('placeholder');
         g.classList.add('bottom');
         g.style.display = 'none';
-        g.setAttribute('transform', 'translate(-16, 42)');
+        const bottomPlaceHolderPos = this._getBottomPlaceHolderPos()
+        g.setAttribute('transform', `translate(${bottomPlaceHolderPos[0]}, ${bottomPlaceHolderPos[1]})`);
         const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
         path.style.strokeWidth = '2px';
         path.setAttribute('d', `M 9.53 5.152 l -8 -5 A 1 1 0 0 0 0 1 V 11 a 1 1 0 0 0 1.53 0.848 l 8 -5 a 1 1 0 0 0 0 -1.7 Z`);
@@ -374,11 +379,16 @@ class BlocklyElement {
     acceptable(block) {
         const topDist = this._prependable && !this._prevBlock ? this._topDistanceFrom(block) : Number.MAX_VALUE;
         const bottomDist = this._appendable ? this._bottomDistanceFrom(block) : Number.MAX_VALUE;
-        const acceptable = topDist < 1600 || bottomDist < 1600;
+        const acceptable = topDist < Editor.acceptableCriteria || bottomDist < Editor.acceptableCriteria;
         const topPlaceholder = this._element.querySelector('.placeholder.top');
-        if (topPlaceholder) topPlaceholder.style.display = topDist < 1600 && topDist < bottomDist ? 'block' : 'none';
+        const topOffset = block.height * block.height;
+        if (topPlaceholder) topPlaceholder.style.display = topDist < Editor.acceptableCriteria + topOffset && topDist < bottomDist ? 'block' : 'none';
         const bottomPlaceHolder = this._element.querySelector('.placeholder.bottom');
-        if (bottomPlaceHolder) bottomPlaceHolder.style.display = bottomDist < 1600 && bottomDist < topDist ? 'block' : 'none';
+        if (bottomPlaceHolder) {
+            const bottomPlaceHolderPos = this._getBottomPlaceHolderPos()
+            bottomPlaceHolder.setAttribute('transform', `translate(${bottomPlaceHolderPos[0]}, ${bottomPlaceHolderPos[1]})`);
+            if (bottomPlaceHolder) bottomPlaceHolder.style.display = bottomDist < Editor.acceptableCriteria && bottomDist < topDist ? 'block' : 'none';
+        }
         return acceptable;
     }
 
