@@ -8,14 +8,50 @@ from subprocess import PIPE
 import tkinter
 import tkinter.ttk
 from tkinter import messagebox
+import asyncio
+import sys
+
+async def read_stream(stream, callback):
+    """Reads lines from a stream and forwards them to a callback function."""
+    while True:
+        line = await stream.readline()
+        if line:
+            callback(line.decode('utf-8'))
+        else:
+            break
+
+async def run_command(cmd):
+    # Start the process asynchronously
+    process = await asyncio.create_subprocess_exec(
+        *cmd,
+        stdout=asyncio.subprocess.PIPE,
+        stderr=asyncio.subprocess.PIPE
+    )
+
+    # Define how to handle the live text
+    def handle_stdout(text):
+        print(f"{text}", end="")
+
+    def handle_stderr(text):
+        print(f"{text}", end="", file=sys.stderr)
+
+    # Run stream readers concurrently
+    await asyncio.gather(
+        read_stream(process.stdout, handle_stdout),
+        read_stream(process.stderr, handle_stderr)
+    )
+
+    # Wait for the process to exit completely
+    return_code = await process.wait()
+    return return_code
 
 parser = argparse.ArgumentParser()
 parser.add_argument(
     "--arduino-cli",
     required=True,
     type=str,
-    metavar="/path/to/arduino-cli",
-    help="Path to arduino-cli",
+    metavar="/path/to/arduino-cli.exe",
+    help="Path to arduino-cli.exe",
 )
 parser.add_argument(
     "--avrdude",
@@ -23,6 +59,13 @@ parser.add_argument(
     type=str,
     metavar="/path/to/avrdude",
     help="Path to avrdude",
+)
+parser.add_argument(
+    "--serial-port",
+    required=True,
+    type=str,
+    metavar="/path/to/serial-port",
+    help="Serial port path or name",
 )
 parser.add_argument(
     "--file-server",
@@ -91,49 +134,30 @@ def compile_and_flush_code():
     open("./onshake_handler.ino", "wb").write(r.content)
 
     # compile
-    command = f"{args.arduino_cli} compile --fqbn ATTinyCore:avr:attinyx5opti --build-path ./build"
+    command = [args.arduino_cli, "compile", "--fqbn", "megaTinyCore:megaavr:atxy4:chip=1604", "--build-path", "./build", "-v"]
     button.config(text="コンパイル中...")
     button.update()
     print("コンパイル中...")
-    print(command)
-    proc = subprocess.run(
-        command,
-        shell=True,
-        stdout=PIPE,
-        stderr=PIPE,
-    )
-    if proc.returncode != 0:
-        stderror = proc.stderr.decode("utf-8")
-        print(stderror)
+    print(" ".join(command))
+    return_code = asyncio.run(run_command(command))
+    if return_code != 0:
         messagebox.showerror(title="エラー", message="コンパイルに失敗しました")
         button.config(text="コンパイル & 書き込み", state="normal")
         button.update()
         return
-    else:
-        stdout = proc.stdout.decode("utf-8")
-        print(stdout)
 
     # flush
-    command = f"{args.avrdude} -C./avrdude.conf -v -pattiny85 -cusbasp -Uflash:w:build/attiny85-led-ornament.ino.hex:i"
+    command = [os.path.join(args.avrdude, "bin", "avrdude.exe"), "-C", os.path.join(args.avrdude, "etc", "avrdude.conf"),  "-v", "-p", "attiny1604", "-c", "serialupdi", "-P", args.serial_port, "-U", "flash:w:build/attiny1604-led-ornament.ino.hex:i"]
     button.config(text="書き込み中...")
     button.update()
     print("書き込み中...")
-    print(command)
-    proc = subprocess.run(
-        command,
-        shell=True,
-        stdout=PIPE,
-        stderr=PIPE,
-    )
-    if proc.returncode != 0:
-        stderror = proc.stderr.decode("utf-8")
-        print(stderror)
+    print(" ".join(command))
+    return_code = asyncio.run(run_command(command))
+    if return_code != 0:
         messagebox.showerror(title="エラー", message="書き込みに失敗しました")
     else:
-        stdout = proc.stdout.decode("utf-8")
-        print(stdout)
         messagebox.showinfo(title="完了", message="コンパイルと書き込みが完了しました")
-
+        
     button.config(text="コンパイル & 書き込み", state="normal")
     button.update()
 
