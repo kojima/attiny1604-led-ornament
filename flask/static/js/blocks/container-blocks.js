@@ -69,12 +69,13 @@ class ContainerBlocklyElement extends BlocklyElement {
                     block.y = totalHeight;
                     block.updateTransform();
                     if (this._innerBlocks[i]) {
-                        block.nextBlock = this._innerBlocks[i];
-                        this._innerBlocks[i].prevBlock = block;
+                        const lastDescendant = block.lastDescendant();                        
+                        lastDescendant.nextBlock = this._innerBlocks[i];
+                        this._innerBlocks[i].prevBlock = lastDescendant;
                         this._innerBlocks[i].x = 0;
-                        this._innerBlocks[i].y += block.height;
+                        this._innerBlocks[i].y += block.cascadingHeight;
                         this._innerBlocks[i].updateTransform();
-                        block._element.appendChild(this._innerBlocks[i]._element);
+                        lastDescendant._element.appendChild(this._innerBlocks[i]._element);
                     }
                     this._innerBlocks[i] = block;
                     this._element.appendChild(block._element);
