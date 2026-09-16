@@ -332,6 +332,12 @@ class FadeInAllLedsWithColorsBlocklyElement extends NeopixelBlocklyElement {
         this._fadeInInMsInput.className = 'fade-in-in-ms non-draggable';
         this._fadeInInMsInputWrapper.appendChild(this._fadeInInMsInput);
 
+        this._fadeInInMsInputWrapper.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            this._fadeInInMsInput.focus();
+        });
+
         return g;
     }
 
@@ -524,6 +530,12 @@ class FadeOutAllLEDsBlocklyElement extends NeopixelBlocklyElement {
         });
         this._fadeOutInMsInput.className = 'fade-out-in-ms non-draggable';
         this._fadeOutInMsInputWrapper.appendChild(this._fadeOutInMsInput);
+        
+        this._fadeOutInMsInputWrapper.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            this._fadeOutInMsInput.focus();
+        });
 
         return g;
     }

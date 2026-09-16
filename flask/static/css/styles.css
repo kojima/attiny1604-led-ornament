@@ -691,6 +691,7 @@ div.wait-in-ms-wrapper,
 div.fade-out-in-ms-wrapper,
 div.fade-in-in-ms-wrapper {
     position: relative;
+    cursor: pointer;
 }
 
 div.wait-in-ms-wrapper:not(.focused)::after,

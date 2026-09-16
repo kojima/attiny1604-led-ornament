@@ -87,6 +87,12 @@ class PauseBlocklyElement extends CommandBlocklyElement {
         this._waitInMsInput.className = 'wait-in-ms non-draggable';
         this._waitInMsInputWrapper.appendChild(this._waitInMsInput);
 
+        this._waitInMsInputWrapper.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            this._waitInMsInput.focus();
+        });
+
         return g;
     }
 
