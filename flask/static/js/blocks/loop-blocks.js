@@ -58,6 +58,7 @@ class LoopBlocklyElement extends ContainerBlocklyElement {
             this._foreignObject.setAttribute('width', 40 + extraH);
             this._svgText.setAttribute('x', 136 + extraH);
             this._repeatCountInput.style.width = `${40 + extraH}px`;
+            this._repeatCountInput.value = this._repeatCount;
         }
         const totalInnerBlockHeight = this.totalInnerBlockHeight(0);
         const extraV = totalInnerBlockHeight > 0 ? totalInnerBlockHeight - 24 : 0;
