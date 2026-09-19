@@ -268,8 +268,11 @@ class BlocklyElement {
                 e.stopPropagation();
 
                 if (Editor.acceptorBlock) {
-                    Editor.acceptorBlock.appendBlock(block);
-                    block._prevBlock && block._prevBlock.render();
+                    const selectedBlock = blocks[Editor.selectedBlock.id];
+                    if (selectedBlock) {
+                        Editor.acceptorBlock.appendBlock(selectedBlock);
+                        selectedBlock._prevBlock && selectedBlock._prevBlock.render();
+                    }
                 }
                 Editor.selectedBlock.handleMouseUp();
                 hideBlocklyToolBowList();
