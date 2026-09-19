@@ -7,6 +7,7 @@ class Editor {
     static canvas = null;
     static triggerBlock = null;
     static selectedBlock = null;
+    static selectedBlockId = null;  // FIXME: remove this ID after unifying it to selectedBlock
     static prevPoint = { x: null, y: null };
     static blocklyScale = defaultScale;
     static offset = { x: 0, y: 0 };
