@@ -243,7 +243,6 @@ class BlocklyElement {
                     clone.element.style.zIndex = 50;
                     document.querySelector('#blockly_drag_space').appendChild(clone.element);
                     Editor.selectedBlock = clone;
-                    Editor.selectedBlockId = clone.id;
                     //clone.select();
                     clone._element.classList.add('grabbing');
                     Editor.prevPoint.x = clientX, Editor.prevPoint.y = clientY;
@@ -268,12 +267,9 @@ class BlocklyElement {
                 e.preventDefault();
                 e.stopPropagation();
 
-                if (Editor.acceptorBlock && Editor.selectedBlockId) {
-                    const selectedBlock = blocks[Editor.selectedBlockId];
-                    if (selectedBlock) {
-                        Editor.acceptorBlock.appendBlock(selectedBlock);
-                        selectedBlock._prevBlock && selectedBlock._prevBlock.render();
-                    }
+                if (Editor.acceptorBlock) {
+                    Editor.acceptorBlock.appendBlock(block);
+                    block._prevBlock && block._prevBlock.render();
                 }
                 Editor.selectedBlock.handleMouseUp();
                 hideBlocklyToolBowList();
@@ -286,7 +282,6 @@ class BlocklyElement {
                     Editor.selectedBlock._element.remove();
                 }
                 Editor.selectedBlock = null;
-                Editor.selectedBlockId = null;
                 Editor.prevPoint.x = null, Editor.prevPoint.y = null;
 
                 const trash = document.getElementById('blockly_trash_space');
