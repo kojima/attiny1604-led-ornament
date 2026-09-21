@@ -521,7 +521,16 @@ const loadBlocklyData = () => {
     let allJsonBlocks = sessionStorage.getItem('blockly_data');
     allJsonBlocks = allJsonBlocks && allJsonBlocks !== '[]'
         ? JSON.parse(allJsonBlocks)
-        : [[{className: 'OnShakedBlocklyElement', x: 208, y: 24, absX: 208, absY: 24, innerBlocks: []}]];
+        : [
+            [{
+                className: 'OnShakedBlocklyElement',
+                x: Editor.initialPosition.x,
+                y: Editor.initialPosition.y,
+                absX: Editor.initialPosition.x,
+                absY: Editor.initialPosition.y,
+                innerBlocks: []
+            }]
+        ];
 
     allJsonBlocks.forEach((jsonBlocks) => {
         let lastBlock = null;

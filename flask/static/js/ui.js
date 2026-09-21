@@ -65,6 +65,8 @@ window.addEventListener('load', () => {
         setTimeout(() => {
             document.querySelector('#copy_wrapper').classList.add('deep-hidden');
         }, 300);
+
+        document.querySelector('#recenter_editor').classList.remove('hidden');
     });
 
     document.getElementById('editor_arduino').addEventListener('click', (e) => {
@@ -88,6 +90,8 @@ window.addEventListener('load', () => {
         setTimeout(() => {
             document.querySelector('#copy_wrapper').classList.remove('hidden');
         }, 10);
+
+        document.querySelector('#recenter_editor').classList.add('hidden');
     });
 
     document.getElementById('copy_code').addEventListener(
@@ -206,6 +210,23 @@ window.addEventListener('load', () => {
                 alert('ファイルサーバーアクセス中に、エラーが発生しました。');
                 button.removeAttribute('disabled');
             };
+        }
+    );
+
+    document.getElementById('recenter_editor').addEventListener(
+        "click",
+        (e) => {
+            const x = Editor.triggerBlock.x;
+            const y = Editor.triggerBlock.y;
+            const diffX = Editor.initialPosition.x - x;
+            const diffY = Editor.initialPosition.y - y;
+            document.querySelectorAll('#blockly_editor > g').forEach((elm) => {
+                const id = elm.getAttribute('id');
+                const block = blocks[id];
+                block.applyPositionDiff(diffX, diffY);
+                block.updateTransform();
+            });
+            saveBlocklyData();
         }
     );
 

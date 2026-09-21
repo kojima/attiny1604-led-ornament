@@ -9,6 +9,7 @@ class Editor {
     static selectedBlock = null;
     static prevPoint = { x: null, y: null };
     static blocklyScale = defaultScale;
+    static initialPosition = {x: 220, y: 25};
     static offset = { x: 0, y: 0 };
     static acceptorBlock = null;
     static arduinoScale = defaultScale;

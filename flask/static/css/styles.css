@@ -167,6 +167,36 @@ text.blocklyText {
     z-index: 41;
 }
 
+#header_right {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+#recenter_editor {
+    cursor: pointer;
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+    border: none;
+    color: #3454d1;
+    font-size: 18px;
+}
+
+#recenter_editor.hidden {
+    display: none;
+}
+
+#recenter_editor:focus,
+#recenter_editor:hover {
+    filter: grayscale(.15) brightness(.85) contrast(1.3);
+}
+
+#recenter_editor:active {
+    filter: grayscale(.15) brightness(.75) contrast(1.3);
+}
+
+
 #container {
     display: flex;
     width: 100%;
