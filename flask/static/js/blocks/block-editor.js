@@ -23,6 +23,12 @@ class Editor {
     static simulatorPausedAt = null;
     static previousTimeStamp = null;
     static currentBlock = null;
+    static soundEffects = {
+        enable: new Audio('/static/se/enable.mp3'),
+        disable: new Audio('/static/se/disable.mp3'),
+        release: new Audio('/static/se/release.mp3'),
+        delete: new Audio('/static/se/delete.mp3'),
+    }
     static acceptableCriteria = 2000;
     static simulatorStep = (timestamp) => {
         const playSimulator = document.getElementById('play_simulator');
@@ -119,6 +125,7 @@ const blocks = {};
                 prevBlock.unsetInnerBlock && prevBlock.unsetInnerBlock(Editor.selectedBlock);
                 prevBlock.nextBlock = null;
                 prevBlock.render();
+                Editor.soundEffects.release.play();
             }
             Editor.selectedBlock.prevBlock = null;
             Editor.selectedBlock.x = Editor.selectedBlock.absX;

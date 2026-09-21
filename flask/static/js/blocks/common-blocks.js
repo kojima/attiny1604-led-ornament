@@ -270,8 +270,16 @@ class BlocklyElement {
                 if (Editor.acceptorBlock) {
                     const selectedBlock = blocks[Editor.selectedBlock.id];
                     if (selectedBlock) {
+                        if (selectedBlock._prevBlock !== Editor.acceptorBlock) {
+                            Editor.soundEffects.enable.play();
+                        }
                         Editor.acceptorBlock.appendBlock(selectedBlock);
                         selectedBlock._prevBlock && selectedBlock._prevBlock.render();
+                    }
+                } else {
+                    const selectedBlock = blocks[Editor.selectedBlock.id];
+                    if (selectedBlock && !selectedBlock._prevBlock) {
+                        Editor.soundEffects.disable.play();
                     }
                 }
                 Editor.selectedBlock.handleMouseUp();
@@ -283,6 +291,9 @@ class BlocklyElement {
                 if (Editor.selectedBlock.deletable && dist > 0 && dist < 184) {
                     delete blocks[Editor.selectedBlock.id];
                     Editor.selectedBlock._element.remove();
+                    // FIXME correctly play delete sound
+                    // Currently release sound unexpectedly is prioritized
+                    Editor.soundEffects.delete.play();
                 }
                 Editor.selectedBlock = null;
                 Editor.prevPoint.x = null, Editor.prevPoint.y = null;
